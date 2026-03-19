@@ -1,0 +1,1527 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LogiChain OS: Global Blockchain Logistics Platform</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="Style.css" rel="stylesheet">
+    
+</head>
+<body>
+    <!-- Enhanced Header with User Profile -->
+    <header>
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-cube"></i>
+                LogiChain OS
+            </div>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="#home"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="#services"><i class="fas fa-shipping-fast"></i> Services</a></li>
+                    <li><a href="#tracking"><i class="fas fa-map-marked-alt"></i> Track Shipment</a></li>
+                    <li><a href="#trading"><i class="fas fa-chart-line"></i> Trading</a></li>
+                    <li><a href="#tariffs"><i class="fas fa-calculator"></i> Tariffs</a></li>
+                    <li><a href="#payment"><i class="fab fa-bitcoin"></i> Payments</a></li>
+                    <div class="auth-buttons">
+                        <a href="#" class="btn auth-btn login-btn" id="loginBtn">
+                            <i class="fas fa-sign-in-alt"></i> Login
+                        </a>
+                        <a href="#" class="btn auth-btn signup-btn" id="signupBtn">
+                            <i class="fas fa-user-plus"></i> Sign Up
+                        </a>
+                    </div>
+                    <!-- User Profile Dropdown -->
+                    <div class="user-profile-dropdown" id="userProfileDropdown">
+                        <div class="user-avatar" id="userAvatar">U</div>
+                        <div class="dropdown-content" id="userDropdown">
+                            <a href="#" onclick="openUserProfile()"><i class="fas fa-user"></i> My Profile</a>
+                            <a href="#" onclick="openUserSettings()"><i class="fas fa-cog"></i> Settings</a>
+                            <a href="#" onclick="toggleTheme()"><i class="fas fa-moon"></i> Dark Mode</a>
+                            <a href="#" onclick="logoutUser()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                        </div>
+                    </div>
+                </ul>
+            </nav>
+            <div class="hamburger">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </header>
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeLogin">&times;</span>
+            <h2><i class="fas fa-sign-in-alt"></i> Login to LogiChain OS</h2>
+            <div class="success-message" id="loginSuccess">
+                <i class="fas fa-check-circle"></i> Login successful! Redirecting to dashboard...
+            </div>
+            <form class="auth-form" id="loginForm">
+                <div class="form-group">
+                    <label for="loginEmail">Email Address</label>
+                    <input type="email" class="form-control" id="loginEmail" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" class="form-control" id="loginPassword" placeholder="Enter your password" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
+                <div style="text-align: center; margin-top: 1rem;">
+                    <a href="#" style="color: var(--primary-color);">Forgot Password?</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Signup Modal -->
+    <div id="signupModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeSignup">&times;</span>
+            <h2><i class="fas fa-user-plus"></i> Create Your LogiChain Account</h2>
+            <div class="success-message" id="signupSuccess">
+                <i class="fas fa-check-circle"></i> Registration successful! Welcome to LogiChain OS!
+            </div>
+            <form class="auth-form" id="signupForm">
+                <div class="form-group">
+                    <label for="signupName">Full Name</label>
+                    <input type="text" class="form-control" id="signupName" placeholder="Enter your full name" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupEmail">Email Address</label>
+                    <input type="email" class="form-control" id="signupEmail" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupPassword">Password</label>
+                    <input type="password" class="form-control" id="signupPassword" placeholder="Create a password" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupConfirmPassword">Confirm Password</label>
+                    <input type="password" class="form-control" id="signupConfirmPassword" placeholder="Confirm your password" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupCompany">Company Name (Optional)</label>
+                    <input type="text" class="form-control" id="signupCompany" placeholder="Enter your company name">
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">
+                    <i class="fas fa-user-plus"></i> Sign Up
+                </button>
+                <div style="text-align: center; margin-top: 1rem;">
+                    <p>Already have an account? <a href="#" id="switchToLogin" style="color: var(--primary-color);">Login here</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Payment Modal -->
+    <div id="paymentModal" class="payment-modal">
+        <div class="payment-modal-content">
+            <span class="close" id="closePayment">&times;</span>
+            <div class="payment-header">
+                <i id="paymentIcon" class="fab fa-bitcoin"></i>
+                <h2 id="paymentTitle">Make Payment</h2>
+            </div>
+            <div class="payment-details">
+                <div class="payment-detail-row">
+                    <span>Service:</span>
+                    <span id="serviceType">Ocean Freight</span>
+                </div>
+                <div class="payment-detail-row">
+                    <span>Weight:</span>
+                    <span id="weight">1000 kg</span>
+                </div>
+                <div class="payment-detail-row">
+                    <span>Base Price:</span>
+                    <span id="basePrice">$3,000.00</span>
+                </div>
+                <div class="payment-detail-row">
+                    <span>Discount:</span>
+                    <span id="cryptoDiscount">-$450.00</span>
+                </div>
+                <div class="payment-detail-row">
+                    <span><strong>Total Amount:</strong></span>
+                    <span id="totalAmount"><strong>$2,550.00</strong></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="cryptoAddress">Your Wallet Address</label>
+                <input type="text" class="crypto-address-input" id="cryptoAddress" placeholder="Enter your cryptocurrency wallet address" required>
+            </div>
+            <button type="button" class="btn btn-primary btn-block" id="confirmPayment">
+                <i class="fas fa-check"></i> Confirm Payment
+            </button>
+        </div>
+    </div>
+    <!-- Traditional Payment Modal -->
+    <div id="traditionalPaymentModal" class="payment-modal">
+        <div class="payment-modal-content">
+            <span class="close" id="closeTraditionalPayment">&times;</span>
+            <div class="payment-header">
+                <i class="fas fa-credit-card"></i>
+                <h2>Traditional Payment</h2>
+            </div>
+            <div class="payment-details">
+                <div class="payment-detail-row">
+                    <span>Service:</span>
+                    <span id="traditionalServiceType">Ocean Freight</span>
+                </div>
+                <div class="payment-detail-row">
+                    <span>Weight:</span>
+                    <span id="traditionalWeight">1000 kg</span>
+                </div>
+                <div class="payment-detail-row">
+                    <span>Base Price:</span>
+                    <span id="traditionalBasePrice">$3,000.00</span>
+                </div>
+                <div class="payment-detail-row">
+                    <span>Discount:</span>
+                    <span id="traditionalDiscount">-$0.00</span>
+                </div>
+                <div class="payment-detail-row">
+                    <span><strong>Total Amount:</strong></span>
+                    <span id="traditionalTotalAmount"><strong>$3,000.00</strong></span>
+                </div>
+            </div>
+            <div class="traditional-payment-form">
+                <h3>Payment Details</h3>
+                <div class="form-group">
+                    <label for="cardName">Name on Card</label>
+                    <input type="text" class="form-control" id="cardName" placeholder="Enter name on card" required>
+                </div>
+                <div class="form-group">
+                    <label for="cardNumber">Card Number</label>
+                    <input type="text" class="form-control" id="cardNumber" placeholder="XXXX XXXX XXXX XXXX" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="cardExpiry">Expiry Date</label>
+                        <input type="text" class="form-control" id="cardExpiry" placeholder="MM/YY" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="cardCVV">CVV</label>
+                        <input type="text" class="form-control" id="cardCVV" placeholder="123" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="billingAddress">Billing Address</label>
+                    <input type="text" class="form-control" id="billingAddress" placeholder="Enter billing address" required>
+                </div>
+            </div>
+            <button type="button" class="btn btn-primary btn-block" id="confirmTraditionalPayment">
+                <i class="fas fa-check"></i> Confirm Payment
+            </button>
+        </div>
+    </div>
+    <!-- Payment Success Modal -->
+    <div id="paymentSuccessModal" class="payment-success-modal">
+        <div class="payment-success-content">
+            <div class="payment-success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h3 class="payment-success-title">Payment Successful!</h3>
+            <p class="payment-success-message">Your payment has been processed successfully. Your shipment will be processed shortly.</p>
+            <button class="btn btn-success" id="closeSuccess">Continue</button>
+        </div>
+    </div>
+    <!-- Plan Details Modal -->
+    <div id="planDetailsModal" class="plan-details-modal">
+        <div class="plan-details-content">
+            <span class="close" id="closePlanDetails">&times;</span>
+            <div class="plan-header">
+                <h2 id="planTitle">Plan Details</h2>
+                <div class="plan-price-display" id="planPriceDisplay">$0.00</div>
+            </div>
+            <p id="planDescription">Detailed information about this shipping plan.</p>
+            <h3>Features Included:</h3>
+            <ul class="plan-features-list" id="planFeaturesList">
+                <li><i class="fas fa-check"></i> Feature 1</li>
+                <li><i class="fas fa-check"></i> Feature 2</li>
+                <li><i class="fas fa-check"></i> Feature 3</li>
+            </ul>
+            <div class="plan-benefits">
+                <h3>Benefits of This Plan:</h3>
+                <div class="benefits-grid" id="planBenefitsGrid">
+                    <div class="benefit-item">
+                        <div class="benefit-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <h4>Fast Delivery</h4>
+                        <p>Quick shipping times</p>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="benefit-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h4>Full Insurance</h4>
+                        <p>Complete coverage</p>
+                    </div>
+                </div>
+            </div>
+            <div class="payment-options-section">
+                <h3>Select Payment Method:</h3>
+                <div class="payment-methods">
+                    <button class="payment-method-btn" data-method="bitcoin">
+                        <i class="fab fa-bitcoin"></i> Bitcoin
+                    </button>
+                    <button class="payment-method-btn" data-method="ethereum">
+                        <i class="fab fa-ethereum"></i> Ethereum
+                    </button>
+                    <button class="payment-method-btn" data-method="usdc">
+                        <i class="fab fa-usd"></i> USDC
+                    </button>
+                    <button class="payment-method-btn" data-method="traditional">
+                        <i class="fas fa-credit-card"></i> Credit Card
+                    </button>
+                </div>
+                <!-- TOGGLE BAR -->
+                <div style="margin-top: 20px; text-align: center;">
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="paymentToggle">
+                        <span class="slider"></span>
+                    </label>
+                    <p>Enable Advanced Payment Options</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Export Report Modal -->
+    <div id="exportModal" class="export-modal">
+        <div class="export-modal-content">
+            <span class="close" id="closeExport">&times;</span>
+            <div class="export-header">
+                <h2>Export Trade Report</h2>
+            </div>
+            <div class="export-content">
+                <p>Your comprehensive export report is ready for download. This report includes all your recent shipments, financial summaries, and performance analytics.</p>
+                <div class="stock-pricing">
+                    <h3>Current Market Pricing</h3>
+                    <div class="stock-grid">
+                        <div class="stock-item">
+                            <div class="stock-name">Ocean Freight</div>
+                            <div class="stock-price">$3.25/kg</div>
+                            <div class="stock-change stock-up">+2.3%</div>
+                        </div>
+                        <div class="stock-item">
+                            <div class="stock-name">Air Express</div>
+                            <div class="stock-price">$15.75/kg</div>
+                            <div class="stock-change stock-down">-1.2%</div>
+                        </div>
+                        <div class="stock-item">
+                            <div class="stock-name">Ground Transport</div>
+                            <div class="stock-price">$8.10/kg</div>
+                            <div class="stock-change stock-up">+0.8%</div>
+                        </div>
+                        <div class="stock-item">
+                            <div class="stock-name">Premium Express</div>
+                            <div class="stock-price">$25.50/kg</div>
+                            <div class="stock-change stock-up">+3.1%</div>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-primary" id="downloadExport">
+                    <i class="fas fa-download"></i> Download Full Report (PDF)
+                </button>
+                <button class="btn btn-secondary" id="emailExport">
+                    <i class="fas fa-envelope"></i> Email Report
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- Analytics Modal -->
+    <div id="analyticsModal" class="analytics-modal">
+        <div class="analytics-modal-content">
+            <span class="close" id="closeAnalytics">&times;</span>
+            <div class="analytics-header">
+                <h2>Trading Analytics Dashboard</h2>
+            </div>
+            <div class="analytics-charts">
+                <div class="chart-container">
+                    <h3>Monthly Revenue Trend</h3>
+                    <div class="chart-placeholder">
+                        <div style="position: absolute; bottom: 0; left: 0; width: 100%; height: 60%; background: linear-gradient(90deg, #3b82f6, #6366f1, #8b5cf6, #d946ef, #ec4899);"></div>
+                        <div style="position: absolute; top: 20px; left: 10%; width: 2px; height: 80%; background: #3b82f6;"></div>
+                        <div style="position: absolute; top: 40px; left: 20%; width: 2px; height: 60%; background: #6366f1;"></div>
+                        <div style="position: absolute; top: 30px; left: 30%; width: 2px; height: 70%; background: #8b5cf6;"></div>
+                        <div style="position: absolute; top: 50px; left: 40%; width: 2px; height: 50%; background: #d946ef;"></div>
+                        <div style="position: absolute; top: 20px; left: 50%; width: 2px; height: 80%; background: #ec4899;"></div>
+                        <div style="position: absolute; top: 10px; left: 60%; width: 2px; height: 90%; background: #f59e0b;"></div>
+                        <div style="position: absolute; top: 30px; left: 70%; width: 2px; height: 70%; background: #10b981;"></div>
+                        <div style="position: absolute; top: 40px; left: 80%; width: 2px; height: 60%; background: #059669;"></div>
+                        <div style="position: absolute; top: 25px; left: 90%; width: 2px; height: 75%; background: #ef4444;"></div>
+                    </div>
+                    <p>Shows your revenue performance over the last 12 months</p>
+                </div>
+                <div class="chart-container">
+                    <h3>Shipment Volume by Region</h3>
+                    <div class="chart-placeholder">
+                        <div style="display: flex; height: 100%; align-items: flex-end; justify-content: space-around;">
+                            <div style="width: 15%; background: #3b82f6; height: 70%; display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; font-weight: bold;">
+                                <span>70%</span>
+                                <span style="font-size: 0.8rem;">Asia</span>
+                            </div>
+                            <div style="width: 15%; background: #10b981; height: 45%; display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; font-weight: bold;">
+                                <span>45%</span>
+                                <span style="font-size: 0.8rem;">Europe</span>
+                            </div>
+                            <div style="width: 15%; background: #f59e0b; height: 60%; display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; font-weight: bold;">
+                                <span>60%</span>
+                                <span style="font-size: 0.8rem;">Americas</span>
+                            </div>
+                            <div style="width: 15%; background: #ef4444; height: 35%; display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; font-weight: bold;">
+                                <span>35%</span>
+                                <span style="font-size: 0.8rem;">Africa</span>
+                            </div>
+                            <div style="width: 15%; background: #8b5cf6; height: 50%; display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; font-weight: bold;">
+                                <span>50%</span>
+                                <span style="font-size: 0.8rem;">Oceania</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p>Breakdown of your shipments by destination region</p>
+                </div>
+            </div>
+            <div class="stock-pricing">
+                <h3>Live Market Pricing</h3>
+                <div class="stock-grid">
+                    <div class="stock-item">
+                        <div class="stock-name">Ocean Freight</div>
+                        <div class="stock-price">$3.25/kg</div>
+                        <div class="stock-change stock-up">+2.3%</div>
+                    </div>
+                    <div class="stock-item">
+                        <div class="stock-name">Air Express</div>
+                        <div class="stock-price">$15.75/kg</div>
+                        <div class="stock-change stock-down">-1.2%</div>
+                    </div>
+                    <div class="stock-item">
+                        <div class="stock-name">Ground Transport</div>
+                        <div class="stock-price">$8.10/kg</div>
+                        <div class="stock-change stock-up">+0.8%</div>
+                    </div>
+                    <div class="stock-item">
+                        <div class="stock-name">Premium Express</div>
+                        <div class="stock-price">$25.50/kg</div>
+                        <div class="stock-change stock-up">+3.1%</div>
+                    </div>
+                </div>
+            </div>
+            <div class="analytics-stats">
+                <div class="analytics-stat">
+                    <h4>Total Revenue</h4>
+                    <div class="analytics-value">$2.4M</div>
+                    <div class="stock-change stock-up">+18.5%</div>
+                </div>
+                <div class="analytics-stat">
+                    <h4>Active Shipments</h4>
+                    <div class="analytics-value">145</div>
+                    <div class="stock-change stock-up">+12.3%</div>
+                </div>
+                <div class="analytics-stat">
+                    <h4>On-Time Rate</h4>
+                    <div class="analytics-value">89%</div>
+                    <div class="stock-change stock-up">+3.2%</div>
+                </div>
+                <div class="analytics-stat">
+                    <h4>Customer Satisfaction</h4>
+                    <div class="analytics-value">4.8/5.0</div>
+                    <div class="stock-change stock-up">+0.2</div>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 2rem;">
+                <button class="btn btn-primary" id="exportAnalytics">
+                    <i class="fas fa-file-export"></i> Export Analytics Data
+                </button>
+                <button class="btn btn-secondary" id="scheduleReport">
+                    <i class="fas fa-calendar"></i> Schedule Report
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- Tariff Details Modal (Blue Background) -->
+    <div id="tariffDetailsModal" class="tariff-details-modal">
+        <div class="tariff-details-content">
+            <span class="close-tariff" id="closeTariffDetails">&times;</span>
+            <div class="tariff-details-header">
+                <h2 id="tariffTitle">Shipping Plan</h2>
+                <div class="tariff-details-price" id="tariffPrice">$0.00/kg</div>
+                <p class="tariff-details-description" id="tariffDescription">Comprehensive details about this shipping plan.</p>
+            </div>
+            <div class="tariff-details-features">
+                <h3>Features Included</h3>
+                <ul class="tariff-details-feature-list" id="tariffFeaturesList">
+                    <li><i class="fas fa-check"></i> Feature 1</li>
+                    <li><i class="fas fa-check"></i> Feature 2</li>
+                    <li><i class="fas fa-check"></i> Feature 3</li>
+                </ul>
+            </div>
+            <div class="tariff-details-benefits">
+                <h3>Benefits of This Plan</h3>
+                <div class="tariff-details-benefits-grid" id="tariffBenefitsGrid">
+                    <div class="tariff-details-benefit-item">
+                        <div class="tariff-details-benefit-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <h4>Fast Delivery</h4>
+                        <p>Quick shipping times</p>
+                    </div>
+                    <div class="tariff-details-benefit-item">
+                        <div class="tariff-details-benefit-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h4>Full Insurance</h4>
+                        <p>Complete coverage</p>
+                    </div>
+                </div>
+            </div>
+            <div class="tariff-details-payment-section">
+                <h3>Select Payment Method:</h3>
+                <div class="tariff-details-payment-methods">
+                    <button class="tariff-details-payment-btn" data-method="bitcoin">
+                        <i class="fab fa-bitcoin"></i> Bitcoin
+                    </button>
+                    <button class="tariff-details-payment-btn" data-method="ethereum">
+                        <i class="fab fa-ethereum"></i> Ethereum
+                    </button>
+                    <button class="tariff-details-payment-btn" data-method="usdc">
+                        <i class="fab fa-usd"></i> USDC
+                    </button>
+                    <button class="tariff-details-payment-btn" data-method="traditional">
+                        <i class="fas fa-credit-card"></i> Credit Card
+                    </button>
+                </div>
+                <div class="tariff-traditional-payment-form" id="tariffTraditionalForm">
+                    <h3>Payment Details</h3>
+                    <div class="form-group">
+                        <label for="tariffCardName">Name on Card</label>
+                        <input type="text" class="form-control" id="tariffCardName" placeholder="Enter name on card" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="tariffCardNumber">Card Number</label>
+                        <input type="text" class="form-control" id="tariffCardNumber" placeholder="XXXX XXXX XXXX XXXX" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="tariffCardExpiry">Expiry Date</label>
+                            <input type="text" class="form-control" id="tariffCardExpiry" placeholder="MM/YY" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="tariffCardCVV">CVV</label>
+                            <input type="text" class="form-control" id="tariffCardCVV" placeholder="123" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="tariffBillingAddress">Billing Address</label>
+                        <input type="text" class="form-control" id="tariffBillingAddress" placeholder="Enter billing address" required>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-success btn-block" id="confirmTariffPayment" style="margin-top: 2rem;">
+                    <i class="fas fa-check"></i> Confirm Payment
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- User Profile Modal -->
+    <div id="userProfileModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeUserProfile">&times;</span>
+            <h2><i class="fas fa-user"></i> User Profile</h2>
+            <div class="profile-update-success" id="profileUpdateSuccess">
+                <i class="fas fa-check-circle"></i> Profile updated successfully!
+            </div>
+            <div style="text-align: center; margin: 2rem 0;">
+                <div class="user-avatar" style="width: 80px; height: 80px; font-size: 2rem; margin: 0 auto;">U</div>
+                <h3 style="margin-top: 1rem;" id="profileNameDisplay">John Doe</h3>
+                <p id="profileEmailDisplay">john.doe@company.com</p>
+            </div>
+            <div class="form-group">
+                <label for="userName">Full Name</label>
+                <input type="text" class="form-control" id="userName" value="John Doe">
+            </div>
+            <div class="form-group">
+                <label for="userEmail">Email Address</label>
+                <input type="email" class="form-control" id="userEmail" value="john.doe@company.com">
+            </div>
+            <div class="form-group">
+                <label for="userCompany">Company</label>
+                <input type="text" class="form-control" id="userCompany" value="LogiChain Solutions">
+            </div>
+            <div class="form-group">
+                <label for="userPhone">Phone Number</label>
+                <input type="text" class="form-control" id="userPhone" value="+1 234 567 8900">
+            </div>
+            <button class="btn btn-primary btn-block" id="saveProfile">
+                <i class="fas fa-save"></i> Save Changes
+            </button>
+        </div>
+    </div>
+    <!-- User Settings Modal -->
+    <div id="userSettingsModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeUserSettings">&times;</span>
+            <h2><i class="fas fa-cog"></i> User Settings</h2>
+            <div class="settings-update-success" id="settingsUpdateSuccess">
+                <i class="fas fa-check-circle"></i> Settings updated successfully!
+            </div>
+            <div class="form-group">
+                <label for="notificationEmail">Email Notifications</label>
+                <div class="toggle-switch">
+                    <input type="checkbox" id="notificationEmail" checked>
+                    <span class="slider"></span>
+                </div>
+                <small>Receive email notifications for shipment updates</small>
+            </div>
+            <div class="form-group">
+                <label for="notificationSMS">SMS Notifications</label>
+                <div class="toggle-switch">
+                    <input type="checkbox" id="notificationSMS">
+                    <span class="slider"></span>
+                </div>
+                <small>Receive SMS notifications for critical updates</small>
+            </div>
+            <div class="form-group">
+                <label for="themePreference">Dark Mode</label>
+                <div class="toggle-switch">
+                    <input type="checkbox" id="themePreference">
+                    <span class="slider"></span>
+                </div>
+                <small>Switch to dark mode for better visibility</small>
+            </div>
+            <div class="form-group">
+                <label for="languagePreference">Language</label>
+                <select class="form-control" id="languagePreference">
+                    <option value="en">English</option>
+                    <option value="es">Spanish</option>
+                    <option value="fr">French</option>
+                    <option value="de">German</option>
+                    <option value="zh">Chinese</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="currencyPreference">Currency</label>
+                <select class="form-control" id="currencyPreference">
+                    <option value="USD">US Dollar (USD)</option>
+                    <option value="EUR">Euro (EUR)</option>
+                    <option value="GBP">British Pound (GBP)</option>
+                    <option value="JPY">Japanese Yen (JPY)</option>
+                    <option value="BTC">Bitcoin (BTC)</option>
+                </select>
+            </div>
+            <button class="btn btn-primary btn-block" id="saveSettings">
+                <i class="fas fa-save"></i> Save Settings
+            </button>
+        </div>
+    </div>
+    <!-- Contact Sales Modal -->
+    <div id="contactModal" class="contact-modal">
+        <div class="contact-modal-content">
+            <span class="close" id="closeContact">&times;</span>
+            <div class="contact-header">
+                <h2><i class="fas fa-phone"></i> Contact Sales</h2>
+            </div>
+            <p>Our sales team will get back to you within 24 hours. Please provide your contact information below:</p>
+            <form id="contactForm">
+                <div class="form-group">
+                    <label for="contactName">Full Name</label>
+                    <input type="text" class="form-control" id="contactName" placeholder="Enter your full name" required>
+                </div>
+                <div class="form-group">
+                    <label for="contactEmail">Email Address</label>
+                    <input type="email" class="form-control" id="contactEmail" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="contactPhone">Phone Number</label>
+                    <input type="tel" class="form-control" id="contactPhone" placeholder="Enter your phone number" required>
+                </div>
+                <div class="form-group">
+                    <label for="companyName">Company Name</label>
+                    <input type="text" class="form-control" id="companyName" placeholder="Enter your company name" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea class="form-control" id="message" rows="4" placeholder="Tell us about your logistics needs..." required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">
+                    <i class="fas fa-paper-plane"></i> Send Message
+                </button>
+            </form>
+            <div class="success-message" id="contactSuccess" style="display: none;">
+                <i class="fas fa-check-circle"></i> Thank you! Our sales team will contact you within 24 hours.
+            </div>
+        </div>
+    </div>
+    <!-- Schedule Demo Modal -->
+    <div id="demoModal" class="demo-modal">
+        <div class="demo-modal-content">
+            <span class="close" id="closeDemo">&times;</span>
+            <div class="demo-header">
+                <h2><i class="fas fa-calendar"></i> Schedule a Demo</h2>
+            </div>
+            <p>Choose a convenient time for our product specialist to demonstrate LogiChain OS features:</p>
+            <form id="demoForm">
+                <div class="form-group">
+                    <label for="demoName">Full Name</label>
+                    <input type="text" class="form-control" id="demoName" placeholder="Enter your full name" required>
+                </div>
+                <div class="form-group">
+                    <label for="demoEmail">Email Address</label>
+                    <input type="email" class="form-control" id="demoEmail" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="demoPhone">Phone Number</label>
+                    <input type="tel" class="form-control" id="demoPhone" placeholder="Enter your phone number" required>
+                </div>
+                <div class="form-group">
+                    <label for="demoDate">Preferred Date</label>
+                    <input type="date" class="form-control" id="demoDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="demoTime">Preferred Time</label>
+                    <select class="form-control" id="demoTime" required>
+                        <option value="">Select a time slot</option>
+                        <option value="09:00">9:00 AM - 10:00 AM</option>
+                        <option value="10:00">10:00 AM - 11:00 AM</option>
+                        <option value="11:00">11:00 AM - 12:00 PM</option>
+                        <option value="14:00">2:00 PM - 3:00 PM</option>
+                        <option value="15:00">3:00 PM - 4:00 PM</option>
+                        <option value="16:00">4:00 PM - 5:00 PM</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="demoCompany">Company Name</label>
+                    <input type="text" class="form-control" id="demoCompany" placeholder="Enter your company name" required>
+                </div>
+                <div class="form-group">
+                    <label for="demoNotes">Special Requirements</label>
+                    <textarea class="form-control" id="demoNotes" rows="3" placeholder="Any specific features you'd like to see?"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">
+                    <i class="fas fa-calendar-check"></i> Schedule Demo
+                </button>
+            </form>
+            <div class="success-message" id="demoSuccess" style="display: none;">
+                <i class="fas fa-check-circle"></i> Demo scheduled successfully! We've sent a confirmation to your email.
+            </div>
+        </div>
+    </div>
+    <!-- Download Form Modal -->
+    <div id="downloadFormModal" class="download-form-modal">
+        <div class="download-form-content">
+            <span class="close" id="closeDownloadForm">&times;</span>
+            <div class="download-form-header">
+                <h2>Select Currency for Download</h2>
+                <p>Choose the currency you want to include in your download</p>
+            </div>
+            <div class="currency-selector">
+                <h3>Available Currencies</h3>
+                <div class="currency-grid">
+                    <div class="currency-option" onclick="selectCurrency(this, 'USD')">
+                        <div class="currency-symbol">$</div>
+                        <div class="currency-name">US Dollar (USD)</div>
+                    </div>
+                    <div class="currency-option" onclick="selectCurrency(this, 'EUR')">
+                        <div class="currency-symbol">€</div>
+                        <div class="currency-name">Euro (EUR)</div>
+                    </div>
+                    <div class="currency-option" onclick="selectCurrency(this, 'GBP')">
+                        <div class="currency-symbol">£</div>
+                        <div class="currency-name">British Pound (GBP)</div>
+                    </div>
+                    <div class="currency-option" onclick="selectCurrency(this, 'JPY')">
+                        <div class="currency-symbol">¥</div>
+                        <div class="currency-name">Japanese Yen (JPY)</div>
+                    </div>
+                    <div class="currency-option" onclick="selectCurrency(this, 'AUD')">
+                        <div class="currency-symbol">A$</div>
+                        <div class="currency-name">Australian Dollar (AUD)</div>
+                    </div>
+                    <div class="currency-option" onclick="selectCurrency(this, 'CAD')">
+                        <div class="currency-symbol">C$</div>
+                        <div class="currency-name">Canadian Dollar (CAD)</div>
+                    </div>
+                    <div class="currency-option" onclick="selectCurrency(this, 'CHF')">
+                        <div class="currency-symbol">Fr</div>
+                        <div class="currency-name">Swiss Franc (CHF)</div>
+                    </div>
+                    <div class="currency-option" onclick="selectCurrency(this, 'CNY')">
+                        <div class="currency-symbol">¥</div>
+                        <div class="currency-name">Chinese Yuan (CNY)</div>
+                    </div>
+                    <div class="currency-option" onclick="selectCurrency(this, 'INR')">
+                        <div class="currency-symbol">₹</div>
+                        <div class="currency-name">Indian Rupee (INR)</div>
+                    </div>
+                    <div class="currency-option" onclick="selectCurrency(this, 'BRL')">
+                        <div class="currency-symbol">R$</div>
+                        <div class="currency-name">Brazilian Real (BRL)</div>
+                    </div>
+                    <div class="currency-option" onclick="selectCurrency(this, 'MXN')">
+                        <div class="currency-symbol">$</div>
+                        <div class="currency-name">Mexican Peso (MXN)</div>
+                    </div>
+                    <div class="currency-option" onclick="selectCurrency(this, 'ZAR')">
+                        <div class="currency-symbol">R</div>
+                        <div class="currency-name">South African Rand (ZAR)</div>
+                    </div>
+                    <div class="currency-option" onclick="selectCurrency(this, 'KRW')">
+                        <div class="currency-symbol">₩</div>
+                        <div class="currency-name">South Korean Won (KRW)</div>
+                    </div>
+                    <div class="currency-option" onclick="selectCurrency(this, 'SGD')">
+                        <div class="currency-symbol">S$</div>
+                        <div class="currency-name">Singapore Dollar (SGD)</div>
+                    </div>
+                    <div class="currency-option" onclick="selectCurrency(this, 'HKD')">
+                        <div class="currency-symbol">HK$</div>
+                        <div class="currency-name">Hong Kong Dollar (HKD)</div>
+                    </div>
+                    <div class="currency-option" onclick="selectCurrency(this, 'BTC')">
+                        <div class="currency-symbol">₿</div>
+                        <div class="currency-name">Bitcoin (BTC)</div>
+                    </div>
+                    <div class="currency-option" onclick="selectCurrency(this, 'ETH')">
+                        <div class="currency-symbol">Ξ</div>
+                        <div class="currency-name">Ethereum (ETH)</div>
+                    </div>
+                    <div class="currency-option" onclick="selectCurrency(this, 'USDC')">
+                        <div class="currency-symbol">USDC</div>
+                        <div class="currency-name">USD Coin (USDC)</div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group" style="margin-top: 2rem;">
+                <label for="downloadFormat">Download Format</label>
+                <select class="form-control" id="downloadFormat">
+                    <option value="pdf">PDF Document</option>
+                    <option value="csv">CSV File</option>
+                    <option value="excel">Excel Spreadsheet</option>
+                    <option value="json">JSON Data</option>
+                </select>
+            </div>
+            <button class="btn btn-primary btn-block" id="confirmDownload" style="margin-top: 1rem;">
+                <i class="fas fa-download"></i> Confirm and Download
+            </button>
+        </div>
+    </div>
+    <main>
+        <!-- Enhanced Hero Section -->
+        <section class="hero" id="home">
+            <div class="container">
+                <div class="hero-content">
+                    <h1><i class="fas fa-cube"></i> LogiChain OS</h1>
+                    <p>Global Blockchain Logistics Platform - Revolutionizing Supply Chain with Cryptocurrency Integration</p>
+                    <div class="hero-buttons">
+                        <a href="#tracking" class="btn btn-primary">
+                            <i class="fas fa-rocket"></i> Start Shipping
+                        </a>
+                        <a href="#" class="btn btn-outline" id="scheduleDemoBtn">
+                            <i class="fas fa-calendar"></i> Schedule Demo
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Attractive Center Truck Showcase -->
+        <section class="truck-showcase" id="showcase">
+            <div class="container">
+                <div class="truck-container">
+                    <h2><i class="fas fa-truck"></i> Next-Generation Logistics Technology</h2>
+                    <p>Experience the future of global shipping with our blockchain-powered logistics platform</p>
+                    <img src="https://cdn-ilbkcfl.nitrocdn.com/cwPpNLtOKLpvzEvYUVRbrznvfkzRrxqd/assets/images/optimized/rev-1b73164/trucksup.com/wp-content/uploads/2025/03/IMG_0013_How-Technology-is-Driving-Innovation-in-Truck-Logistics.png"
+                         alt="Advanced Logistics Truck" class="truck-image">
+                    <div class="truck-features">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <h3>Blockchain Security</h3>
+                            <p>Immutable tracking records with cryptographic security ensuring complete transparency</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-satellite-dish"></i>
+                            </div>
+                            <h3>IoT Integration</h3>
+                            <p>Real-time sensor data from vehicles, containers, and warehouses</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <h3>AI Optimization</h3>
+                            <p>Machine learning algorithms optimize routes, predict delays, and reduce costs</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fab fa-bitcoin"></i>
+                            </div>
+                            <h3>Crypto Payments</h3>
+                            <p>Accept Bitcoin, Ethereum, and major cryptocurrencies for seamless transactions</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Enhanced Tracking Section with Live Map -->
+        <section class="tracking-section" id="tracking">
+            <div class="container">
+                <div class="tracking-container">
+                    <h2><i class="fas fa-map-marked-alt"></i> Advanced Shipment Tracking</h2>
+                    <p>Track your shipments in real-time with blockchain-verified location data</p>
+                    <div class="tracking-form">
+                        <input type="text" class="tracking-input" placeholder="Enter Tracking Number (e.g., LCO123456789)" id="trackingInput">
+                        <button class="btn btn-primary" onclick="trackShipment()">
+                            <i class="fas fa-search"></i> Track Now
+                        </button>
+                        <div class="tracking-map" id="trackingResults" style="display: none;">
+                            <h3 style="margin-bottom:1.2rem;"><i class="fas fa-route"></i> Live Tracking Results &nbsp;<span id="trackIdBadge" style="font-size:.85rem;background:var(--primary-color);color:#fff;padding:.25rem .75rem;border-radius:50px;font-weight:600;"></span></h3>
+
+                            <!-- Animated SVG World Map -->
+                            <div class="map-container">
+                              <svg id="trackingMapSvg" viewBox="0 0 900 420" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                  <radialGradient id="bgGrad" cx="50%" cy="50%" r="70%">
+                                    <stop offset="0%"   stop-color="#1a3a5c"/>
+                                    <stop offset="100%" stop-color="#0a1628"/>
+                                  </radialGradient>
+                                  <filter id="glow">
+                                    <feGaussianBlur stdDeviation="3" result="blur"/>
+                                    <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                                  </filter>
+                                  <marker id="arrowBlue" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+                                    <path d="M0,0 L0,8 L8,4 Z" fill="#4facfe"/>
+                                  </marker>
+                                </defs>
+
+                                <!-- Ocean background -->
+                                <rect width="900" height="420" fill="url(#bgGrad)"/>
+
+                                <!-- Grid lines -->
+                                <g stroke="rgba(255,255,255,0.05)" stroke-width="1">
+                                  <line x1="0" y1="140" x2="900" y2="140"/>
+                                  <line x1="0" y1="280" x2="900" y2="280"/>
+                                  <line x1="225" y1="0" x2="225" y2="420"/>
+                                  <line x1="450" y1="0" x2="450" y2="420"/>
+                                  <line x1="675" y1="0" x2="675" y2="420"/>
+                                </g>
+
+                                <!-- Continents (simplified) -->
+                                <!-- North America -->
+                                <path d="M60,60 L180,55 L200,90 L220,120 L190,160 L150,180 L110,175 L80,150 L55,110 Z"
+                                      fill="rgba(72,187,120,0.25)" stroke="rgba(72,187,120,0.4)" stroke-width="1.5"/>
+                                <!-- South America -->
+                                <path d="M140,200 L190,195 L210,230 L205,290 L175,320 L140,310 L120,270 L115,230 Z"
+                                      fill="rgba(72,187,120,0.25)" stroke="rgba(72,187,120,0.4)" stroke-width="1.5"/>
+                                <!-- Europe -->
+                                <path d="M350,50 L440,45 L455,80 L440,110 L400,120 L360,115 L340,90 Z"
+                                      fill="rgba(72,187,120,0.25)" stroke="rgba(72,187,120,0.4)" stroke-width="1.5"/>
+                                <!-- Africa -->
+                                <path d="M360,140 L430,135 L450,180 L440,260 L400,290 L360,265 L340,200 L345,160 Z"
+                                      fill="rgba(72,187,120,0.25)" stroke="rgba(72,187,120,0.4)" stroke-width="1.5"/>
+                                <!-- Asia -->
+                                <path d="M470,40 L680,35 L720,70 L730,130 L680,160 L600,170 L520,155 L465,120 L455,75 Z"
+                                      fill="rgba(72,187,120,0.25)" stroke="rgba(72,187,120,0.4)" stroke-width="1.5"/>
+                                <!-- India sub-continent -->
+                                <path d="M565,155 L600,150 L615,190 L595,230 L565,225 L545,195 Z"
+                                      fill="rgba(72,187,120,0.3)" stroke="rgba(72,187,120,0.5)" stroke-width="1.5"/>
+                                <!-- Australia -->
+                                <path d="M690,240 L790,235 L810,270 L800,310 L755,325 L700,315 L675,285 Z"
+                                      fill="rgba(72,187,120,0.25)" stroke="rgba(72,187,120,0.4)" stroke-width="1.5"/>
+
+                                <!-- Shipping route: Mumbai → Dubai → Hamburg -->
+                                <!-- Dashed background path -->
+                                <path id="routePath" d="M 580,200 Q 530,160 490,130 Q 420,90 395,80"
+                                      fill="none" stroke="rgba(79,172,254,0.25)" stroke-width="3" stroke-dasharray="8,6"/>
+                                <!-- Animated glow path -->
+                                <path d="M 580,200 Q 530,160 490,130 Q 420,90 395,80"
+                                      fill="none" stroke="#4facfe" stroke-width="2.5"
+                                      stroke-dasharray="200" stroke-dashoffset="200" id="animRoute" filter="url(#glow)">
+                                  <animate attributeName="stroke-dashoffset" from="200" to="0" dur="2.5s" fill="freeze" begin="0.5s"/>
+                                </path>
+
+                                <!-- Origin: Mumbai -->
+                                <circle cx="580" cy="200" r="8" fill="#10b981" filter="url(#glow)"/>
+                                <circle class="pulse-ring" cx="580" cy="200" r="8" fill="none" stroke="#10b981" stroke-width="2" opacity="0.7"/>
+                                <text x="580" y="222" text-anchor="middle" fill="#10b981" font-size="12" font-weight="bold">Mumbai</text>
+                                <text x="580" y="235" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="10">Origin</text>
+
+                                <!-- Current: Dubai -->
+                                <circle cx="490" cy="130" r="10" fill="#f59e0b" filter="url(#glow)"/>
+                                <circle class="pulse-ring" cx="490" cy="130" r="10" fill="none" stroke="#f59e0b" stroke-width="2" opacity="0.9"/>
+                                <text x="490" y="152" text-anchor="middle" fill="#f59e0b" font-size="12" font-weight="bold">Dubai</text>
+                                <text x="490" y="165" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="10">Current ● In Transit</text>
+
+                                <!-- Destination: Hamburg -->
+                                <circle cx="395" cy="80" r="8" fill="#ef4444" filter="url(#glow)"/>
+                                <text x="395" y="102" text-anchor="middle" fill="#ef4444" font-size="12" font-weight="bold">Hamburg</text>
+                                <text x="395" y="115" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="10">Destination</text>
+
+                                <!-- Animated ship icon along route -->
+                                <g id="shipGroup" filter="url(#glow)">
+                                  <circle r="7" fill="rgba(255,255,255,0.9)"/>
+                                  <text text-anchor="middle" dy="5" font-size="10">🚢</text>
+                                  <animateMotion dur="8s" repeatCount="indefinite"
+                                    path="M 580,200 Q 530,160 490,130 Q 420,90 395,80" rotate="auto"/>
+                                </g>
+
+                                <!-- Legend -->
+                                <g transform="translate(20,360)">
+                                  <circle cx="8" cy="8" r="5" fill="#10b981"/>
+                                  <text x="18" y="12" fill="rgba(255,255,255,0.7)" font-size="11">Origin</text>
+                                  <circle cx="75" cy="8" r="5" fill="#f59e0b"/>
+                                  <text x="85" y="12" fill="rgba(255,255,255,0.7)" font-size="11">Current</text>
+                                  <circle cx="155" cy="8" r="5" fill="#ef4444"/>
+                                  <text x="165" y="12" fill="rgba(255,255,255,0.7)" font-size="11">Destination</text>
+                                  <line x1="230" y1="8" x2="260" y2="8" stroke="#4facfe" stroke-width="2" stroke-dasharray="4,3"/>
+                                  <text x="268" y="12" fill="rgba(255,255,255,0.7)" font-size="11">Route</text>
+                                </g>
+
+                                <!-- Blockchain verified badge -->
+                                <g transform="translate(720,10)">
+                                  <rect width="165" height="28" rx="14" fill="rgba(102,126,234,0.35)" stroke="rgba(102,126,234,0.6)" stroke-width="1"/>
+                                  <text x="82" y="19" text-anchor="middle" fill="#a5b4fc" font-size="11" font-weight="bold">⛓ Blockchain Verified</text>
+                                </g>
+                              </svg>
+                            </div>
+
+                            <!-- Route steps progress -->
+                            <div style="margin-top:1.5rem;">
+                              <div class="route-steps">
+                                <div class="route-step done"  title="Mumbai, India"><i class="fas fa-anchor"></i></div>
+                                <div class="route-step done"  title="Arabian Sea"><i class="fas fa-water"></i></div>
+                                <div class="route-step active" title="Dubai Port, UAE"><i class="fas fa-map-marker-alt"></i></div>
+                                <div class="route-step"       title="Red Sea"><i class="fas fa-water"></i></div>
+                                <div class="route-step"       title="Suez Canal"><i class="fas fa-route"></i></div>
+                                <div class="route-step"       title="Hamburg, Germany"><i class="fas fa-flag-checkered"></i></div>
+                              </div>
+                              <div style="display:flex;justify-content:space-between;font-size:.8rem;color:var(--gray-500);margin-top:.3rem;padding:0 4px;">
+                                <span>Mumbai</span><span>Arabian Sea</span><span style="color:var(--primary-color);font-weight:600;">Dubai ●</span><span>Red Sea</span><span>Suez Canal</span><span>Hamburg</span>
+                              </div>
+                              <div class="progress-track" style="margin-top:1rem;">
+                                <div class="progress-fill" id="shipProgress" style="width:0%"></div>
+                              </div>
+                              <div style="display:flex;justify-content:space-between;font-size:.82rem;color:var(--gray-500);">
+                                <span>0%</span><span id="progressLabel" style="color:var(--primary-color);font-weight:700;">58% Complete</span><span>100%</span>
+                              </div>
+                            </div>
+
+                            <!-- Status chips -->
+                            <div class="tracking-status-bar">
+                              <div class="ts-chip"><i class="fas fa-map-marker-alt"></i> Dubai Port Terminal, UAE</div>
+                              <div class="ts-chip"><i class="fas fa-clock"></i> ETA: 3 Days 14 Hrs</div>
+                              <div class="ts-chip"><i class="fas fa-thermometer-half"></i> 18°C | 45% RH</div>
+                              <div class="ts-chip"><i class="fas fa-shield-alt"></i> Blockchain Verified</div>
+                              <div class="ts-chip"><i class="fas fa-weight-hanging"></i> 1,200 kg</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Cryptocurrency Payment Section -->
+        <section class="payment-section" id="payment">
+            <div class="container">
+                <h2 class="text-center"><i class="fab fa-bitcoin"></i> Cryptocurrency Payment Options</h2>
+                <p class="text-center">Pay for your shipments using various cryptocurrencies with instant conversion</p>
+                <div class="payment-options">
+                    <div class="payment-card highlighted">
+                        <div class="payment-icon crypto-icon">
+                            <i class="fab fa-bitcoin"></i>
+                        </div>
+                        <h3>Bitcoin Payment</h3>
+                        <p>Pay with Bitcoin for secure, decentralized transactions with lower fees</p>
+                        <button class="btn btn-primary" onclick="openPaymentModal('Bitcoin', 'fab fa-bitcoin')">
+                            <i class="fab fa-bitcoin"></i> Pay with Bitcoin
+                        </button>
+                    </div>
+                    <div class="payment-card highlighted">
+                        <div class="payment-icon" style="color: #627eea;">
+                            <i class="fab fa-ethereum"></i>
+                        </div>
+                        <h3>Ethereum Payment</h3>
+                        <p>Use Ethereum for smart contract-powered logistics agreements</p>
+                        <button class="btn btn-primary" onclick="openPaymentModal('Ethereum', 'fab fa-ethereum')">
+                            <i class="fab fa-ethereum"></i> Pay with Ethereum
+                        </button>
+                    </div>
+                    <div class="payment-card highlighted">
+                        <div class="payment-icon" style="color: #f7931a;">
+                            <i class="fab fa-usd"></i>
+                        </div>
+                        <h3>USD Coin (USDC)</h3>
+                        <p>Stablecoin payment with 1:1 USD peg for price stability</p>
+                        <button class="btn btn-primary" onclick="openPaymentModal('USDC', 'fab fa-usd')">
+                            <i class="fab fa-usd"></i> Pay with USDC
+                        </button>
+                    </div>
+                    <div class="payment-card highlighted">
+                        <div class="payment-icon" style="color: #3C37FF;">
+                            <i class="fas fa-atom"></i>
+                        </div>
+                        <h3>Polkadot (DOT)</h3>
+                        <p>Interoperable blockchain payments across multiple networks</p>
+                        <button class="btn btn-primary" onclick="openPaymentModal('Polkadot', 'fas fa-atom')">
+                            <i class="fas fa-atom"></i> Pay with Polkadot
+                        </button>
+                    </div>
+                    <div class="payment-card highlighted">
+                        <div class="payment-icon" style="color: #FF001B;">
+                            <i class="fas fa-fire"></i>
+                        </div>
+                        <h3>Cardano (ADA)</h3>
+                        <p>Sustainable and scalable blockchain platform for secure payments</p>
+                        <button class="btn btn-primary" onclick="openPaymentModal('Cardano', 'fas fa-fire')">
+                            <i class="fas fa-fire"></i> Pay with Cardano
+                        </button>
+                    </div>
+                    <!-- BLUE BORDER FOR TRADITIONAL PAYMENT -->
+                    <div class="payment-card traditional">
+                        <div class="payment-icon card-icon">
+                            <i class="fas fa-credit-card"></i>
+                        </div>
+                        <h3>Traditional Payment</h3>
+                        <p>Credit cards, bank transfers, and other traditional payment methods</p>
+                        <button class="btn btn-primary" onclick="openTraditionalPaymentModal()">
+                            <i class="fas fa-credit-card"></i> Pay Traditional
+                        </button>
+                    </div>
+                </div>
+                <div class="crypto-converter">
+                    <h3><i class="fas fa-exchange-alt"></i> Cryptocurrency Converter</h3>
+                    <p>Convert your shipping costs to cryptocurrency in real-time</p>
+                    <div class="converter-form">
+                        <input type="number" class="currency-input" placeholder="Enter amount in USD" id="usdAmount">
+                        <select class="currency-input" id="cryptoSelect">
+                            <option value="BTC">Bitcoin (BTC)</option>
+                            <option value="ETH">Ethereum (ETH)</option>
+                            <option value="LTC">Litecoin (LTC)</option>
+                            <option value="ADA">Cardano (ADA)</option>
+                            <option value="USDC">USD Coin (USDC)</option>
+                            <option value="DOT">Polkadot (DOT)</option>
+                            <option value="XRP">Ripple (XRP)</option>
+                            <option value="DOGE">Dogecoin (DOGE)</option>
+                            <option value="SOL">Solana (SOL)</option>
+                            <option value="MATIC">Polygon (MATIC)</option>
+                        </select>
+                        <button class="btn btn-secondary" onclick="convertCurrency()">
+                            <i class="fas fa-calculator"></i> Convert
+                        </button>
+                    </div>
+                    <div id="conversionResult" class="mt-3"></div>
+                </div>
+            </div>
+        </section>
+        <!-- Tariff Section with 5 Heavy Plans -->
+        <section class="tariff-section" id="tariffs">
+            <div class="container">
+                <h2 class="text-center"><i class="fas fa-calculator"></i> Shipping Tariffs & Pricing</h2>
+                <p class="text-center">Transparent blockchain-verified pricing with cryptocurrency discounts</p>
+                <div class="tariff-grid">
+                    <div class="tariff-card" onclick="openTariffDetails('Express Air', '$15/kg', 'Lightning-fast air cargo delivery', 'express-air')">
+                        <h3><i class="fas fa-paper-plane"></i> Express Air</h3>
+                        <div class="tariff-price">$15<span style="font-size: 1rem;">/kg</span></div>
+                        <ul class="tariff-features">
+                            <li><i class="fas fa-check"></i> 1-3 Days Delivery</li>
+                            <li><i class="fas fa-check"></i> Real-time Tracking</li>
+                            <li><i class="fas fa-check"></i> Insurance Included</li>
+                            <li><i class="fas fa-check"></i> Priority Handling</li>
+                            <li><i class="fas fa-times"></i> Bulk Discounts</li>
+                        </ul>
+                        <button class="btn btn-primary">View Details</button>
+                    </div>
+                    <div class="tariff-card featured" onclick="openTariffDetails('Ocean Freight', '$3/kg', 'Cost-effective sea freight solutions', 'ocean-freight')">
+                        <h3><i class="fas fa-ship"></i> Ocean Freight</h3>
+                        <div class="tariff-price">$3<span style="font-size: 1rem;">/kg</span></div>
+                        <ul class="tariff-features">
+                            <li><i class="fas fa-check"></i> 15-45 Days Delivery</li>
+                            <li><i class="fas fa-check"></i> Blockchain Tracking</li>
+                            <li><i class="fas fa-check"></i> Full Insurance</li>
+                            <li><i class="fas fa-check"></i> Container Options</li>
+                            <li><i class="fas fa-check"></i> Volume Discounts</li>
+                        </ul>
+                        <button class="btn btn-primary">View Details</button>
+                    </div>
+                    <div class="tariff-card" onclick="openTariffDetails('Ground Transport', '$8/kg', 'Reliable overland shipping', 'ground-transport')">
+                        <h3><i class="fas fa-truck"></i> Ground Transport</h3>
+                        <div class="tariff-price">$8<span style="font-size: 1rem;">/kg</span></div>
+                        <ul class="tariff-features">
+                            <li><i class="fas fa-check"></i> 5-10 Days Delivery</li>
+                            <li><i class="fas fa-check"></i> GPS Tracking</li>
+                            <li><i class="fas fa-check"></i> Basic Insurance</li>
+                            <li><i class="fas fa-check"></i> Regional Coverage</li>
+                            <li><i class="fas fa-check"></i> Eco-Friendly</li>
+                        </ul>
+                        <button class="btn btn-primary">View Details</button>
+                    </div>
+                    <div class="tariff-card" onclick="openTariffDetails('Premium Express', '$25/kg', 'Ultra-fast premium delivery service', 'premium-express')">
+                        <h3><i class="fas fa-rocket"></i> Premium Express</h3>
+                        <div class="tariff-price">$25<span style="font-size: 1rem;">/kg</span></div>
+                        <ul class="tariff-features">
+                            <li><i class="fas fa-check"></i> 24-Hour Delivery</li>
+                            <li><i class="fas fa-check"></i> Dedicated Courier</li>
+                            <li><i class="fas fa-check"></i> Premium Insurance</li>
+                            <li><i class="fas fa-check"></i> Temperature Control</li>
+                            <li><i class="fas fa-check"></i> Priority Customs</li>
+                        </ul>
+                        <button class="btn btn-primary">View Details</button>
+                    </div>
+                    <div class="tariff-card" onclick="openTariffDetails('Economy Bulk', '$1.5/kg', 'Cost-effective bulk shipping', 'economy-bulk')">
+                        <h3><i class="fas fa-boxes"></i> Economy Bulk</h3>
+                        <div class="tariff-price">$1.5<span style="font-size: 1rem;">/kg</span></div>
+                        <ul class="tariff-features">
+                            <li><i class="fas fa-check"></i> 30-60 Days Delivery</li>
+                            <li><i class="fas fa-check"></i> Consolidated Shipping</li>
+                            <li><i class="fas fa-check"></i> Basic Tracking</li>
+                            <li><i class="fas fa-check"></i> Shared Container</li>
+                            <li><i class="fas fa-check"></i> Best Value</li>
+                        </ul>
+                        <button class="btn btn-primary">View Details</button>
+                    </div>
+                </div>
+                <div class="text-center mt-3">
+                    <p><i class="fab fa-bitcoin"></i> <strong>Crypto Discount:</strong> Pay with cryptocurrency and save 15% on all shipments!</p>
+                </div>
+            </div>
+        </section>
+        <!-- Import/Export Trading Section -->
+        <section class="trading-section" id="trading">
+            <div class="container">
+                <h2 class="text-center"><i class="fas fa-chart-line"></i> Import/Export Trading Dashboard</h2>
+                <p class="text-center">Monitor your trading operations with real-time profit/loss analytics</p>
+                <div class="trading-dashboard">
+                    <div class="trading-stats">
+                        <div class="stat-card">
+                            <div class="stat-value">$2.4M</div>
+                            <p>Total Trade Volume</p>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">145</div>
+                            <p>Active Shipments</p>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">89%</div>
+                            <p>On-Time Delivery</p>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">34</div>
+                            <p>Countries Served</p>
+                        </div>
+                    </div>
+                    <div class="profit-loss">
+                        <div class="profit-card">
+                            <h3><i class="fas fa-arrow-up"></i> Monthly Profit</h3>
+                            <div class="stat-value">+$184,250</div>
+                            <p>18.5% increase from last month</p>
+                        </div>
+                        <div class="loss-card">
+                            <h3><i class="fas fa-arrow-down"></i> Monthly Expenses</h3>
+                            <div class="stat-value">-$142,800</div>
+                            <p>12.3% decrease from last month</p>
+                        </div>
+                    </div>
+                    <div class="text-center mt-3">
+                        <button class="btn btn-primary" onclick="openExportModal()">
+                            <i class="fas fa-download"></i> Export Report
+                        </button>
+                        <button class="btn btn-secondary" onclick="openAnalyticsModal()">
+                            <i class="fas fa-chart-pie"></i> View Analytics
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Enhanced Solutions Section -->
+        <section class="solutions-section" id="solutions">
+            <div class="container">
+                <h2 class="text-center"><i class="fas fa-cogs"></i> Comprehensive Solutions</h2>
+                <p class="text-center">Complete logistics ecosystem powered by blockchain technology</p>
+                <div class="solutions-grid">
+                    <div class="solution-card">
+                        <div class="solution-icon">
+                            <i class="fas fa-warehouse"></i>
+                        </div>
+                        <h3>Fulfillment Network</h3>
+                        <p>Automated warehouse management with AI-driven inventory optimization and robotic picking systems.</p>
+                        <ul class="solution-features">
+                            <li><i class="fas fa-check"></i> 50+ Global Warehouses</li>
+                            <li><i class="fas fa-check"></i> Real-time Inventory Sync</li>
+                            <li><i class="fas fa-check"></i> Robotic Automation</li>
+                            <li><i class="fas fa-check"></i> Climate-Controlled Storage</li>
+                        </ul>
+                    </div>
+                    <div class="solution-card">
+                        <div class="solution-icon">
+                            <i class="fas fa-network-wired"></i>
+                        </div>
+                        <h3>Logistics Network</h3>
+                        <p>Blockchain-powered logistics network with smart contracts for automated operations.</p>
+                        <ul class="solution-features">
+                            <li><i class="fas fa-check"></i> Smart Contract Automation</li>
+                            <li><i class="fas fa-check"></i> Multi-modal Transportation</li>
+                            <li><i class="fas fa-check"></i> Route Optimization AI</li>
+                            <li><i class="fas fa-check"></i> Carbon Footprint Tracking</li>
+                        </ul>
+                    </div>
+                    <div class="solution-card">
+                        <div class="solution-icon">
+                            <i class="fas fa-shipping-fast"></i>
+                        </div>
+                        <h3>Pre-Shipping Solutions</h3>
+                        <p>Advanced preparation tools with predictive analytics and automated documentation.</p>
+                        <ul class="solution-features">
+                            <li><i class="fas fa-check"></i> Document Automation</li>
+                            <li><i class="fas fa-check"></i> Customs Clearance</li>
+                            <li><i class="fas fa-check"></i> Risk Assessment</li>
+                            <li><i class="fas fa-check"></i> Packaging Optimization</li>
+                        </ul>
+                    </div>
+                    <div class="solution-card">
+                        <div class="solution-icon">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <h3>Post-Shipping Analytics</h3>
+                        <p>Comprehensive analytics dashboard with machine learning insights and performance metrics.</p>
+                        <ul class="solution-features">
+                            <li><i class="fas fa-check"></i> Real-time Dashboards</li>
+                            <li><i class="fas fa-check"></i> Performance KPIs</li>
+                            <li><i class="fas fa-check"></i> Predictive Analytics</li>
+                            <li><i class="fas fa-check"></i> Customer Satisfaction</li>
+                        </ul>
+                    </div>
+                    <div class="solution-card">
+                        <div class="solution-icon">
+                            <i class="fas fa-desktop"></i>
+                        </div>
+                        <h3>Order Management System</h3>
+                        <p>Unified platform for managing orders across multiple channels with blockchain verification.</p>
+                        <ul class="solution-features">
+                            <li><i class="fas fa-check"></i> Multi-channel Integration</li>
+                            <li><i class="fas fa-check"></i> Inventory Synchronization</li>
+                            <li><i class="fas fa-check"></i> Automated Workflows</li>
+                            <li><i class="fas fa-check"></i> API Connectivity</li>
+                        </ul>
+                    </div>
+                    <div class="solution-card">
+                        <div class="solution-icon">
+                            <i class="fas fa-boxes"></i>
+                        </div>
+                        <h3>Warehouse Management</h3>
+                        <p>Intelligent warehouse operations with IoT sensors and automated material handling.</p>
+                        <ul class="solution-features">
+                            <li><i class="fas fa-check"></i> IoT Sensor Network</li>
+                            <li><i class="fas fa-check"></i> Automated Material Handling</li>
+                            <li><i class="fas fa-check"></i> Quality Control Systems</li>
+                            <li><i class="fas fa-check"></i> Labor Optimization</li>
+                        </ul>
+                    </div>
+                    <div class="solution-card">
+                        <div class="solution-icon">
+                            <i class="fas fa-truck-loading"></i>
+                        </div>
+                        <h3>Freight Management</h3>
+                        <p>End-to-end freight solutions with dynamic pricing and capacity optimization.</p>
+                        <ul class="solution-features">
+                            <li><i class="fas fa-check"></i> Dynamic Pricing Engine</li>
+                            <li><i class="fas fa-check"></i> Capacity Planning</li>
+                            <li><i class="fas fa-check"></i> Carrier Management</li>
+                            <li><i class="fas fa-check"></i> Load Optimization</li>
+                        </ul>
+                    </div>
+                    <div class="solution-card">
+                        <div class="solution-icon">
+                            <i class="fas fa-motorcycle"></i>
+                        </div>
+                        <h3>Hyperlocal Delivery</h3>
+                        <p>Last-mile delivery solutions with autonomous vehicles and drone technology.</p>
+                        <ul class="solution-features">
+                            <li><i class="fas fa-check"></i> Autonomous Delivery</li>
+                            <li><i class="fas fa-check"></i> Drone Integration</li>
+                            <li><i class="fas fa-check"></i> Same-day Delivery</li>
+                            <li><i class="fas fa-check"></i> Green Logistics</li>
+                        </ul>
+                    </div>
+                    <div class="solution-card">
+                        <div class="solution-icon">
+                            <i class="fas fa-satellite-dish"></i>
+                        </div>
+                        <h3>Control Tower</h3>
+                        <p>Central command center with AI-powered decision making and global visibility.</p>
+                        <ul class="solution-features">
+                            <li><i class="fas fa-check"></i> Global Visibility</li>
+                            <li><i class="fas fa-check"></i> AI Decision Making</li>
+                            <li><i class="fas fa-check"></i> Exception Management</li>
+                            <li><i class="fas fa-check"></i> Proactive Alerts</li>
+                        </ul>
+                    </div>
+                    <div class="solution-card">
+                        <div class="solution-icon">
+                            <i class="fas fa-link"></i>
+                        </div>
+                        <h3>Integrated Supply Chains</h3>
+                        <p>Seamlessly connected supply chain ecosystem with blockchain transparency.</p>
+                        <ul class="solution-features">
+                            <li><i class="fas fa-check"></i> End-to-end Integration</li>
+                            <li><i class="fas fa-check"></i> Supplier Network</li>
+                            <li><i class="fas fa-check"></i> Blockchain Transparency</li>
+                            <li><i class="fas fa-check"></i> Risk Mitigation</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Enhanced Stats Section -->
+        <section class="stats-section" id="stats">
+            <div class="container">
+                <h2 class="text-center"><i class="fas fa-chart-pie"></i> Global Impact Statistics</h2>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number">5000+</div>
+                        <p><i class="fas fa-map-marker-alt"></i> Serviceable Locations</p>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">200+</div>
+                        <p><i class="fas fa-handshake"></i> Global Partners</p>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">1M+</div>
+                        <p><i class="fas fa-users"></i> Active Customers</p>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">99.5%</div>
+                        <p><i class="fas fa-shield-alt"></i> SLA Adherence</p>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">$2.4B</div>
+                        <p><i class="fas fa-dollar-sign"></i> Cargo Value Moved</p>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">45%</div>
+                        <p><i class="fas fa-leaf"></i> Carbon Reduction</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Enhanced Services -->
+        <section class="services-section" id="services">
+            <div class="container">
+                <h2 class="text-center"><i class="fas fa-shipping-fast"></i> Our Premium Services</h2>
+                <div class="services-grid">
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-plane"></i>
+                        </div>
+                        <h3>Air Freight Express</h3>
+                        <p>Lightning-fast air cargo delivery with real-time tracking and temperature-controlled options for time-sensitive shipments.</p>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-ship"></i>
+                        </div>
+                        <h3>Ocean Freight</h3>
+                        <p>Cost-effective sea freight solutions with full container load (FCL) and less than container load (LCL) options.</p>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-truck"></i>
+                        </div>
+                        <h3>Ground Transportation</h3>
+                        <p>Reliable overland shipping with GPS tracking, optimized routes, and eco-friendly delivery options.</p>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-warehouse"></i>
+                        </div>
+                        <h3>Warehousing Solutions</h3>
+                        <p>State-of-the-art storage facilities with climate control, security systems, and inventory management.</p>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-file-contract"></i>
+                        </div>
+                        <h3>Customs Clearance</h3>
+                        <p>Streamlined customs processing with automated documentation and compliance management.</p>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3>Insurance & Security</h3>
+                        <p>Comprehensive cargo insurance and advanced security measures for high-value shipments.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- CTA Section -->
+        <section class="cta" style="background: linear-gradient(135deg, rgba(37, 99, 235, 0.9), rgba(59, 130, 246, 0.9)), url('https://piernext.portdebarcelona.cat/wp-content/uploads/2021/07/TradeLens-plataforma-blockchain.jpg') center/cover; color: white; padding: 6rem 0; text-align: center;">
+            <div class="container">
+                <h2><i class="fas fa-rocket"></i> Ready to Transform Your Logistics?</h2>
+                <p>Join thousands of businesses already using LogiChain OS for their global shipping needs</p>
+                <div class="hero-buttons">
+                    <a href="#" class="btn btn-success" id="contactSalesBtn">
+                        <i class="fas fa-phone"></i> Contact Sales
+                    </a>
+                    <a href="#" class="btn btn-secondary" id="scheduleDemoBtn2">
+                        <i class="fas fa-calendar"></i> Schedule Demo
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+    <!-- Enhanced Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3><i class="fas fa-cube"></i> LogiChain OS</h3>
+                    <p>Revolutionizing global logistics with blockchain technology and cryptocurrency integration.</p>
+                    <div style="margin-top: 1rem;">
+                        <a href="#" style="margin-right: 1rem; color: var(--primary-color);"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" style="margin-right: 1rem; color: var(--primary-color);"><i class="fab fa-twitter"></i></a>
+                        <a href="#" style="margin-right: 1rem; color: var(--primary-color);"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" style="margin-right: 1rem; color: var(--primary-color);"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>Solutions</h3>
+                    <ul>
+                        <li><a href="#">Fulfillment Network</a></li>
+                        <li><a href="#">Logistics Network</a></li>
+                        <li><a href="#">Pre-Shipping Solutions</a></li>
+                        <li><a href="#">Post-Shipping Solutions</a></li>
+                        <li><a href="#">Order Management</a></li>
+                        <li><a href="#">Warehouse Management</a></li>
+                        <li><a href="#">Freight Management</a></li>
+                        <li><a href="#">Hyperlocal Delivery</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Company</h3>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Case Studies</a></li>
+                        <li><a href="#">Our Clients</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Press</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms & Conditions</a></li>
+                        <li><a href="#">Compliance</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact Information</h3>
+                    <ul>
+                        <li><i class="fas fa-phone"></i> +91 9311847248</li>
+                        <li><i class="fas fa-envelope"></i> sales@logichain.com</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Corporate Office: LogiChain Tower, Blockchain District, Tech City, Global Hub - 123456</li>
+                        <li><i class="fab fa-bitcoin"></i> Bitcoin: bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh</li>
+                        <li><i class="fab fa-ethereum"></i> Ethereum: 0x742d35Cc6634C0532925a3b8D8Cb59E8B8ce4888</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 LogiChain OS. All Rights Reserved | Powered by Blockchain Technology</p>
+            </div>
+        </div>
+    </footer>
+   <script src="Script.js"></script>
+</body>
+</html>
